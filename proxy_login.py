@@ -88,16 +88,16 @@ while True:
 
     except requests.exceptions.ConnectionError:
         data['connectivity'] = 0
-        print(u'XTRAMAN is down! (connection error)')
+        print(u'network is down! (connection error)')
         raise
 
     except requests.exceptions.Timeout:
         data['connectivity'] = 0
-        print(u'XTRAMAN is down! (timeout)')
+        print(u'network is down! (timeout)')
 
     # except ssl.SSLError:
     #     data['connectivity'] = 0
-    #     print(u'XTRAMAN is down! (SSL error)')
+    #     print(u'network is down! (SSL error)')
 
     # log to csv (ascii only)
     with open(logfile, 'at', newline='') as f:
