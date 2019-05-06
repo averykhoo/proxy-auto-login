@@ -95,10 +95,6 @@ while True:
         data['connectivity'] = 0
         print(u'network is down! (timeout)')
 
-    # except ssl.SSLError:
-    #     data['connectivity'] = 0
-    #     print(u'network is down! (SSL error)')
-
     # log to csv (ascii only)
     with open(logfile, 'at', newline='') as f:
         c = csv.writer(f)
