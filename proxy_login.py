@@ -89,7 +89,6 @@ while True:
     except requests.exceptions.ConnectionError:
         data['connectivity'] = 0
         print(u'network is down! (connection error)')
-        raise
 
     except requests.exceptions.Timeout:
         data['connectivity'] = 0
