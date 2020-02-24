@@ -48,7 +48,7 @@ while True:
     # attempt to login
     try:
         # make request to any https site
-        r_init = requests.get(u'https://www.google.com/',
+        r_init = requests.get(u'http://maps.google.com/',
                               verify=False,
                               timeout=30)
         print(r_init.url)
@@ -110,3 +110,4 @@ while True:
     time.sleep(60)
     print(u'')
     print(u'woke up at:', datetime.datetime.now())
+
