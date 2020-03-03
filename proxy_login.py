@@ -13,9 +13,12 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 with open('credentials.json', 'rt') as f:
     credentials = json.load(f)
 
-logfile = os.path.abspath(u'proxy_login.log.csv')
+logfile = os.path.abspath('proxy_login.log.csv')
 
-print(u'program started at:', datetime.datetime.now())
+site = 'http://www.bing.com/'
+expect_string='bing'
+
+print('program started at:', datetime.datetime.now())
 
 # make log file dir
 if not os.path.isdir(os.path.dirname(logfile)):
@@ -48,51 +51,52 @@ while True:
     # attempt to login
     try:
         # make request to any https site
-        r_init = requests.get(u'http://maps.google.com/',
+        r_init = requests.get(site,
                               verify=False,
                               timeout=30)
         print(r_init.url)
 
-        # catch the redirect
-        if u':8080/mwg-internal' in r_init.url:
+        # already logged in?
+        if expect_string in r_init.url:
+            data['logged_in'] = 1
+
+        # catch the redirect to login
+        elif ':8080/mwg-internal' in r_init.url:
             data['login_redirect'] = 1
 
             # log in
-            print(u'caught redirect, logging in...')
+            print('caught redirect, logging in...')
             r_login = requests.post(r_init.url,
-                                    headers={u'username': base64.b64encode(credentials['username'].encode('ascii')),
-                                             u'password': base64.b64encode(credentials['password'].encode('ascii'))
+                                    headers={'username': base64.b64encode(credentials['username'].encode('ascii')),
+                                             'password': base64.b64encode(credentials['password'].encode('ascii'))
                                              },
                                     verify=False,
                                     timeout=30)
             print(r_login.url)
 
             # resolve the url
-            print(u'resolving url...')
+            print('resolving url...')
             r_resolve = requests.get(r_login.url,
                                      verify=False,
                                      timeout=30)
             print(r_resolve.url)
 
-            if u'google' in r_resolve.url:
+            if expect_string in r_resolve.url:
                 data['logged_in'] = 1
-
-        elif u'google' in r_init.url:
-            data['logged_in'] = 1
 
         # log the time
         if data['logged_in']:
-            print(u'logged in')
+            print('logged in')
         else:
-            print(u'failed to login')
+            print('failed to login')
 
     except requests.exceptions.ConnectionError:
         data['connectivity'] = 0
-        print(u'network is down! (connection error)')
+        print('network is down! (connection error)')
 
     except requests.exceptions.Timeout:
         data['connectivity'] = 0
-        print(u'network is down! (timeout)')
+        print('network is down! (timeout)')
 
     # log to csv (ascii only)
     with open(logfile, 'at', newline='') as f:
@@ -106,8 +110,8 @@ while True:
         ])
 
     # sleep 1 min
-    print(u'going to sleep, time is:', datetime.datetime.now())
+    print('going to sleep, time is:', datetime.datetime.now())
     time.sleep(60)
-    print(u'')
-    print(u'woke up at:', datetime.datetime.now())
+    print()
+    print('woke up at:', datetime.datetime.now())
 
