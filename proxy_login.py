@@ -111,7 +111,7 @@ while True:
 
     # sleep 1 min
     print('going to sleep, time is:', datetime.datetime.now())
-    time.sleep(60)
+    time.sleep(30)
     print()
     print('woke up at:', datetime.datetime.now())
 
