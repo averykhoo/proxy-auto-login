@@ -15,8 +15,8 @@ with open('credentials.json', 'rt') as f:
 
 logfile = os.path.abspath('proxy_login.log.csv')
 
-site = 'http://www.bing.com/'
-expect_string='bing'
+site = 'https://www.bing.com/'
+expect_string = 'bing'
 
 print('program started at:', datetime.datetime.now())
 
@@ -114,4 +114,3 @@ while True:
     time.sleep(30)
     print()
     print('woke up at:', datetime.datetime.now())
-
