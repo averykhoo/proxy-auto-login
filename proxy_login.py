@@ -6,9 +6,9 @@ import os
 import time
 
 import requests
-import urllib3
 
-urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+# noinspection PyUnresolvedReferences
+requests.packages.urllib3.disable_warnings(requests.packages.urllib3.exceptions.InsecureRequestWarning)
 
 with open('credentials.json', 'rt') as f:
     credentials = json.load(f)
