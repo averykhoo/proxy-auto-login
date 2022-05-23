@@ -2,7 +2,6 @@ import base64
 import csv
 import datetime
 import json
-import os
 import time
 from pathlib import Path
 
@@ -50,11 +49,11 @@ def main():
 
         # data to log
         data = {
-            'timestamp': datetime.datetime.now(),
-            'connectivity': 1,
+            'timestamp':      datetime.datetime.now(),
+            'connectivity':   1,
             'login_redirect': 0,
-            'start_time': time.time(),
-            'logged_in': 0,
+            'start_time':     time.time(),
+            'logged_in':      0,
         }
 
         # attempt to login
@@ -102,8 +101,8 @@ def main():
             print('network is down! (connection error)')
 
         except requests.exceptions.ChunkedEncodingError:
-        data['connectivity'] = 0
-        print('network is down! (connection reset error)')
+            data['connectivity'] = 0
+            print('network is down! (connection reset error)')
 
         except requests.exceptions.Timeout:
             data['connectivity'] = 0
@@ -112,13 +111,12 @@ def main():
         # log to csv (ascii only)
         with logfile_path.open('a', newline='') as f:
             c = csv.writer(f)
-            c.writerow([
-                data['timestamp'],
-                data['connectivity'],
-                data['login_redirect'],
-                time.time() - data['start_time'],
-                data['logged_in'],
-            ])
+            c.writerow([data['timestamp'],
+                        data['connectivity'],
+                        data['login_redirect'],
+                        time.time() - data['start_time'],
+                        data['logged_in'],
+                        ])
 
         # sleep
         print('going to sleep, time is:', datetime.datetime.now())
