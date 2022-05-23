@@ -94,6 +94,10 @@ while True:
         data['connectivity'] = 0
         print('network is down! (connection error)')
 
+    except requests.exceptions.ChunkedEncodingError:
+        data['connectivity'] = 0
+        print('network is down! (connection reset error)')
+
     except requests.exceptions.Timeout:
         data['connectivity'] = 0
         print('network is down! (timeout)')
