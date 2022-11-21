@@ -2,6 +2,7 @@ import base64
 import csv
 import datetime
 import json
+import re
 import time
 from pathlib import Path
 
@@ -29,6 +30,11 @@ def main():
             'username': base64.b64encode(credentials['username'].encode('ascii')),
             'password': base64.b64encode(credentials['password'].encode('ascii'))
         }
+        healthcheck_url = credentials['healthcheck_url'] or None
+
+    # sanity check healthcheck
+    if healthcheck_url is not None:
+        assert re.match(r'https?://', healthcheck_url, flags=re.I)
 
     # make log file dir
     logfile_path.parent.mkdir(parents=True, exist_ok=True)
@@ -46,6 +52,12 @@ def main():
             ])
 
     while True:
+        if healthcheck_url:
+            # noinspection PyBroadException
+            try:
+                requests.get(healthcheck_url + '/start', verify=False)
+            except Exception:
+                pass
 
         # data to log
         data = {
@@ -117,6 +129,16 @@ def main():
                         time.time() - data['start_time'],
                         data['logged_in'],
                         ])
+
+        if healthcheck_url:
+            # noinspection PyBroadException
+            try:
+                if data['logged_in']:
+                    requests.get(healthcheck_url, verify=False)
+                else:
+                    requests.get(healthcheck_url + '/fail', verify=False)
+            except Exception:
+                pass
 
         # sleep
         print('going to sleep, time is:', datetime.datetime.now())
