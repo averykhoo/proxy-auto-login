@@ -129,7 +129,7 @@ def main():
                 if data['logged_in']:
                     requests.get(healthcheck_url, verify=False, timeout=5)
                 else:
-                    requests.get(healthcheck_url + '/fail', verify=False, timeout=5)
+                    requests.post(healthcheck_url + '/fail', json=data, verify=False, timeout=5)
             except Exception:
                 pass
 
