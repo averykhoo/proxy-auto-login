@@ -99,7 +99,7 @@ def main():
             if data['logged_in']:
                 print('logged in')
             else:
-                print('failed to login')
+                print('failed to login (check if your password has expired)')
 
         except requests.exceptions.ConnectionError:
             data['connectivity'] = 0
