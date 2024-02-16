@@ -55,7 +55,7 @@ def main():
         if healthcheck_url:
             # noinspection PyBroadException
             try:
-                requests.get(healthcheck_url + '/start', verify=False, timeout=5)
+                requests.get(healthcheck_url + '/start', verify=not True, timeout=5)
             except Exception:
                 pass
 
@@ -71,25 +71,25 @@ def main():
         # attempt to login
         try:
             # make request to any https site
-            r_init = requests.get(site, verify=False, timeout=30)
+            r_init = requests.get(site, verify=not True, timeout=30)
             print(r_init.url)
 
             # already logged in?
             if expect_string in r_init.url:
                 data['logged_in'] = 1
 
-            # catch the redirect to login
+            # catch the redirect to log in
             elif ':8080/mwg-internal' in r_init.url:
                 data['login_redirect'] = 1
 
                 # log in
                 print('caught redirect, logging in...')
-                r_login = requests.post(r_init.url, headers=credentials_header, verify=False, timeout=30)
+                r_login = requests.post(r_init.url, headers=credentials_header, verify=not True, timeout=30)
                 print(r_login.url)
 
                 # resolve the url
                 print('resolving url...')
-                r_resolve = requests.get(r_login.url, verify=False, timeout=30)
+                r_resolve = requests.get(r_login.url, verify=not True, timeout=30)
                 print(r_resolve.url)
 
                 if expect_string in r_resolve.url:
@@ -127,9 +127,9 @@ def main():
             # noinspection PyBroadException
             try:
                 if data['logged_in']:
-                    requests.get(healthcheck_url, verify=False, timeout=5)
+                    requests.get(healthcheck_url, verify=not True, timeout=5)
                 else:
-                    requests.post(healthcheck_url + '/fail', json=data, verify=False, timeout=5)
+                    requests.post(healthcheck_url + '/fail', json=data, verify=not True, timeout=5)
             except Exception:
                 pass
 
