@@ -57,7 +57,7 @@ def main():
             try:
                 requests.get(healthcheck_url + '/start', verify=not True, timeout=5)
             except Exception:
-                pass
+                print('could not ping healthchecks')
 
         # data to log
         data = {
